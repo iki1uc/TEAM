@@ -2,15 +2,13 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>TEAM – Build · iki1uc</title>
+<title>TEAM – Runtime · iki1uc</title>
 
 <style>
 body { background:#000; color:#0f0; font-family:monospace; padding:40px; }
-h1 { color:#0f0; letter-spacing:4px; margin-bottom:30px; }
 .block { background:#111; border:1px solid #333; padding:25px; margin-bottom:30px; border-radius:8px; }
 .title { font-size:22px; color:#6cf; margin-bottom:10px; }
-pre { background:#000; border-left:3px solid #6cf; padding:15px; margin-top:10px; white-space:pre-wrap; }
-a { color:#6cf; text-decoration:none; font-weight:bold; }
+pre { background:#000; border-left:3px solid #6cf; padding:15px; white-space:pre-wrap; }
 </style>
 
 <script type="module">
@@ -21,11 +19,15 @@ import { TMP_GHOST } from "../TMP/TMP_Ghost.js";
 import { NET_OVERDRIVE } from "../NET/NET_Overdrive.js";
 import { TEAM_BUILD } from "./TE.js";
 
+import { TEAM_DASHBOARD } from "./TEAM_Dashboard.js";
+import { TEAM_AI_CORE } from "./TEAM_AI_Core.js";
+import { TEAM_RUNTIME_MONITOR } from "./TEAM_Runtime_Monitor.js";
+import { TEAM_FUSION_SPHERE } from "./TEAM_Fusion_Sphere.js";
+import { TEAM_HUB_MATRIX } from "./TEAM_HUB_Matrix.js";
+import { TEAM_NC_QUANTUM_NODES } from "./TEAM_NC_Quantum_Nodes.js";
+
 (async function () {
 
-    /* -----------------------------------
-       MODULES LADEN
-    ----------------------------------- */
     const nc = NC_QUANTUM();
     const pq = PQ_HYPER(nc);
     const tmp = TMP_GHOST(pq);
@@ -33,25 +35,25 @@ import { TEAM_BUILD } from "./TE.js";
     const net = NET_OVERDRIVE(nc, pq, tmp, hub);
     const respo = { mode: "active", signal: "bright" };
 
-    /* -----------------------------------
-       TEAM BUILD
-    ----------------------------------- */
     const team = TEAM_BUILD(hub, nc, pq, tmp, net, respo);
 
-    document.getElementById("team-build").innerText =
-        JSON.stringify(team, null, 2);
+    document.getElementById("dashboard").innerText =
+        JSON.stringify(TEAM_DASHBOARD(team), null, 2);
 
-    /* -----------------------------------
-       TEAM STATUS
-    ----------------------------------- */
-    document.getElementById("team-status").innerText =
-        `Status: ${team.status}\nStation: ${team.station}`;
+    document.getElementById("ai-core").innerText =
+        JSON.stringify(TEAM_AI_CORE(team), null, 2);
 
-    /* -----------------------------------
-       TEAM NODES
-    ----------------------------------- */
-    document.getElementById("team-nodes").innerText =
-        JSON.stringify(team.team, null, 2);
+    document.getElementById("runtime").innerText =
+        JSON.stringify(TEAM_RUNTIME_MONITOR(team), null, 2);
+
+    document.getElementById("fusion").innerText =
+        JSON.stringify(TEAM_FUSION_SPHERE(team), null, 2);
+
+    document.getElementById("hub-matrix").innerText =
+        JSON.stringify(TEAM_HUB_MATRIX(team), null, 2);
+
+    document.getElementById("nc-nodes").innerText =
+        JSON.stringify(TEAM_NC_QUANTUM_NODES(team), null, 2);
 
 })();
 </script>
@@ -60,24 +62,36 @@ import { TEAM_BUILD } from "./TE.js";
 
 <body>
 
-<h1>TEAM – Build · iki1uc</h1>
+<h1>TEAM – Runtime · iki1uc</h1>
 
-<!-- TEAM BUILD -->
 <div class="block">
-    <div class="title">TEAM‑Build</div>
-    <pre id="team-build"></pre>
+    <div class="title">TEAM‑Dashboard</div>
+    <pre id="dashboard"></pre>
 </div>
 
-<!-- TEAM STATUS -->
 <div class="block">
-    <div class="title">TEAM‑Status</div>
-    <pre id="team-status"></pre>
+    <div class="title">TEAM‑AI‑Core</div>
+    <pre id="ai-core"></pre>
 </div>
 
-<!-- TEAM NODES -->
 <div class="block">
-    <div class="title">TEAM‑Nodes</div>
-    <pre id="team-nodes"></pre>
+    <div class="title">TEAM‑Runtime‑Monitor</div>
+    <pre id="runtime"></pre>
+</div>
+
+<div class="block">
+    <div class="title">TEAM‑Fusion‑Sphere</div>
+    <pre id="fusion"></pre>
+</div>
+
+<div class="block">
+    <div class="title">TEAM‑HUB‑Matrix</div>
+    <pre id="hub-matrix"></pre>
+</div>
+
+<div class="block">
+    <div class="title">TEAM‑NC‑Quantum‑Nodes</div>
+    <pre id="nc-nodes"></pre>
 </div>
 
 </body>
