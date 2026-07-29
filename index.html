@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>ANKER – S01 · iki1uc</title>
+<title>TEAM – Build · iki1uc</title>
 
 <style>
 body { background:#000; color:#0f0; font-family:monospace; padding:40px; }
@@ -13,112 +13,72 @@ pre { background:#000; border-left:3px solid #6cf; padding:15px; margin-top:10px
 a { color:#6cf; text-decoration:none; font-weight:bold; }
 </style>
 
-<!-- SYSTEM CORE MODULES -->
-<script src="../HH/cr/RESPO.core.js"></script>
-<script src="../HH/cr/AXI.core.js"></script>
-<script src="../HH/cr/TEM.core.js"></script>
-<script src="../HH/cr/RUN8.core.js"></script>
+<script type="module">
+import { HUB_AI } from "../HUB/HUB_AI.js";
+import { NC_QUANTUM } from "../NC/NC_Quantum.js";
+import { PQ_HYPER } from "../PQ/PQ_Hyper.js";
+import { TMP_GHOST } from "../TMP/TMP_Ghost.js";
+import { NET_OVERDRIVE } from "../NET/NET_Overdrive.js";
+import { TEAM_BUILD } from "./TE.js";
 
-<!-- ID MODULES -->
-<script src="IDkoop.js"></script>
-<script src="IDneutral.js"></script>
-<script src="IDpook.js"></script>
+(async function () {
+
+    /* -----------------------------------
+       MODULES LADEN
+    ----------------------------------- */
+    const nc = NC_QUANTUM();
+    const pq = PQ_HYPER(nc);
+    const tmp = TMP_GHOST(pq);
+    const hub = HUB_AI(nc, pq, tmp);
+    const net = NET_OVERDRIVE(nc, pq, tmp, hub);
+    const respo = { mode: "active", signal: "bright" };
+
+    /* -----------------------------------
+       TEAM BUILD
+    ----------------------------------- */
+    const team = TEAM_BUILD(hub, nc, pq, tmp, net, respo);
+
+    document.getElementById("team-build").innerText =
+        JSON.stringify(team, null, 2);
+
+    /* -----------------------------------
+       TEAM STATUS
+    ----------------------------------- */
+    document.getElementById("team-status").innerText =
+        `Status: ${team.status}\nStation: ${team.station}`;
+
+    /* -----------------------------------
+       TEAM NODES
+    ----------------------------------- */
+    document.getElementById("team-nodes").innerText =
+        JSON.stringify(team.team, null, 2);
+
+})();
+</script>
 
 </head>
 
 <body>
 
-<h1>ANKER – S01 · iki1uc</h1>
+<h1>TEAM – Build · iki1uc</h1>
 
-<!-- ACHSEN STATUS -->
+<!-- TEAM BUILD -->
 <div class="block">
-    <div class="title">Stabilisationsachse</div>
-    <p id="axis-status">Lade Achsen…</p>
+    <div class="title">TEAM‑Build</div>
+    <pre id="team-build"></pre>
 </div>
 
-<!-- IDENTITÄT -->
+<!-- TEAM STATUS -->
 <div class="block">
-    <div class="title">Identität</div>
-    <p>
-        <a href="id.html">→ ANKER‑Identität öffnen</a>
-    </p>
-    <pre id="id-status"></pre>
+    <div class="title">TEAM‑Status</div>
+    <pre id="team-status"></pre>
 </div>
 
-<!-- ACHSEN LISTE -->
+<!-- TEAM NODES -->
 <div class="block">
-    <div class="title">Stabilisierte Achsen</div>
-    <pre id="axis-list"></pre>
+    <div class="title">TEAM‑Nodes</div>
+    <pre id="team-nodes"></pre>
 </div>
-
-<!-- RESPO STATUS -->
-<div class="block">
-    <div class="title">RESPO‑Status</div>
-    <pre id="respo-status"></pre>
-</div>
-
-<!-- SYSTEM STATUS -->
-<div class="block">
-    <div class="title">System‑Status</div>
-    <pre id="system-status"></pre>
-</div>
-
-<script>
-(async function () {
-
-    /* -------------------------------
-       ANKER DATEN LADEN
-    --------------------------------*/
-    const anker = await fetch("ANKER.json").then(r => r.json()).catch(() => null);
-    const raw = await fetch("ANKER.raw").then(r => r.text()).catch(() => "");
-
-    document.getElementById("axis-list").innerText = raw || "Keine Achsen gefunden";
-
-
-    /* -------------------------------
-       AXI ENGINE
-    --------------------------------*/
-    const axi = AXI_CORE();
-    document.getElementById("axis-status").innerText =
-        axi ? "Achsen stabil" : "Achsenfehler";
-
-
-    /* -------------------------------
-       RESPO ENGINE
-    --------------------------------*/
-    const respo = RESPO_CORE(anker || {});
-    document.getElementById("respo-status").innerText =
-        `Score: ${respo.score}\nStatus: ${respo.ok ? "STABIL" : "KRITISCH"}`;
-
-
-    /* -------------------------------
-       ID MODUS ERKENNEN
-    --------------------------------*/
-    let idMode = "neutral";
-    if (ID_KOOP?.active) idMode = "koop";
-    if (ID_POOK?.active) idMode = "pook";
-
-    const idMap = {
-        koop: ID_KOOP,
-        neutral: ID_NEUTRAL,
-        pook: ID_POOK
-    };
-
-    document.getElementById("id-status").innerText =
-        `Modus: ${idMode.toUpperCase()}\nInfo: ${idMap[idMode].info()}`;
-
-
-    /* -------------------------------
-       SYSTEM STATUS
-    --------------------------------*/
-    const tem = TEM_CORE();
-    const run8 = RUN8();
-
-    document.getElementById("system-status").innerText =
-        `Zeit: ${tem.timestamp}\nKernel: ${run8.run}\nSystem: OK`;
-
-})();
-</script>
 
 </body>
 </html>
